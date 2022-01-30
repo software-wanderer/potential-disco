@@ -1,0 +1,1253 @@
+<!DOCTYPE html>
+<html lang="ko"><head>
+
+
+<title>아주대 수강신청</title>
+<meta charset="utf-8">
+<meta name="viewport" content="user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0, width=device-width">
+<meta http-equiv="Content-Script-Type" content="text/javascript">
+<meta http-equiv="Content-Style-Type" content="text/css">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="format-detection" content="telephone=no">
+
+<link rel="stylesheet" href="{{ url_for('static', filename='css/layout.css') }}">
+<link rel="stylesheet" href="{{ url_for('static', filename='css/spmodal.css') }}">
+<link rel="stylesheet" href="{{ url_for('static', filename='css/loading.css') }}">
+
+<link rel="stylesheet" href="{{ url_for('static', filename='css/crownix-viewer.min.css') }}">
+<script language="javascript" src="{{ url_for('static', filename='script/jquery.lastest.js') }}"></script>
+<script language="javascript" src="{{ url_for('static', filename='script/common.js') }}"></script>
+<script language="javascript" src="{{ url_for('static', filename='script/message.js') }}"></script>
+<script language="javascript" src="{{ url_for('static', filename='script/crownix-viewer.min.js') }}"></script>
+
+<script type="text/javascript">
+<!--
+var pageInfo = getPageInfo();
+
+var contextPath = '';
+var pageType 	= '';
+var isMobile 	= false;
+var isLoginUser = true;
+
+if(pageType == "major") $('title').html("아주대학교 전공진입제 수강신청");
+else $('title').html(message.get('title'));
+//-->
+</script>
+
+<body style="overflow: auto;">
+    <div class="header" style="text-align: center;">
+	    <form id="frmHeader" onsubmit="return false;">
+		<input type="hidden" name="strCampFg" value="S">
+		<input type="hidden" name="strLtYy" value="2022">
+		<input type="hidden" name="strLtShtmCd" value="U0002001">
+		<input type="hidden" name="strNewYn" value="">
+		<input type="hidden" name="strTransYn" value="">
+        <div class="fixed-wid h-logo">
+
+
+	             <a href="#" class="h-logo-link">
+	                 <img src="{{ url_for('static', filename='images/white-logo.png') }}" alt="아주대로고">
+	             </a>
+	             <div class="top-menu">
+	                 <ul id="menu">
+	                     <li id="bord">공지사항</li>
+	                     <li id="aply" class="on">수강신청</li>
+	                     <li id="time">개인시간표</li>
+	                     <li id="revs">조정강의정보</li>
+	                 </ul>
+	             </div>
+
+
+
+			<input type="hidden" name="strStdNo" value="{{stdNumber}}">
+			<input type="hidden" name="strLoginUserNo" value="{{stdNumber}}">
+			<input type="hidden" name="strStdNm" value="{{name}}">
+			<input type="hidden" name="strLtShtmNm" value="1학기">
+			<input type="hidden" name="strShyrCd" value="U0003002">
+
+             <div class="logout">
+                 <div class="login-info"><span>{{name}}</span> / <span>{{stdNumber}}</span> 님</div>
+                 <div class="nb-buttons nb-inlint">
+                     <div class="nb-btn-logout"><button type="button" id="btnLogout" style="cursor: pointer;">로그아웃</button></div>
+                 </div>
+             </div>
+
+
+         </div>
+         </form>
+    </div>
+
+<script type="text/javascript">
+<!--
+$(document).ready(function(){
+	$("#menu > li").on("click",function(){
+	   if(!isLoginUser){ notLogin(); }else{ goPages($(this).attr("id")); }
+	});
+
+	$("#mobileMenu").on("click",function(){
+		if($(this).hasClass("on")){
+			$(this).removeClass("on");
+		}else{
+			$(this).addClass("on");
+		}
+	});
+
+   $("#btnLogout")
+   .text(message.get('logout'))
+   .on("click",function(){
+	   logoutUser();
+   });
+
+   $(".h-logo-link").on("click",function(){
+	   goLoginPage();
+   });
+
+   $("button").css("cursor","pointer");
+
+   $(".FC_ENTER").on("keypress",function(){
+   	   fnIsEnter();
+   });
+
+
+});
+//-->
+</script>
+	<div class="BO_system nb-q fixed-wid" id="contents">
+
+
+
+
+
+    <form name="application" onsubmit="return false;">
+        <input type="text" style="display:none">
+        <input type="hidden" name="strLtYy" value="2022">
+        <input type="hidden" name="strLtShtmCd" value="U0002001">
+        <input type="hidden" name="strStdNo" value="{{stdNumber}}">
+        <input type="hidden" name="strClssNo">
+		<input type="hidden" name="strLoginUserNo" value="{{stdNumber}}">
+		<input type="hidden" name="strHaksuNo">
+		<input type="hidden" name="strMaxAplyPnt" value="24">
+		<input type="hidden" name="strBaseAplyPnt" value="">
+		<input type="hidden" name="strUserIp" value="">
+		<input type="hidden" name="strShyrCd" value="U0003002">
+
+		<input type="hidden" name="strStdMainMj" value="">
+		<input type="hidden" name="strStdMutiMj1" value="">
+		<input type="hidden" name="strStdMutiM2" value="">
+
+		<input type="hidden" name="strOpenLtNo">
+        <h1 class="page-title">수강신청<span></span></h1>
+        <div class="da-row-form">
+            <div class="da-row">
+                <div class="cell w20p">
+                    <dl class="w5-5p">
+                        <dt><span>성명</span></dt>
+                        <dd><span>{{name}}</span></dd>
+                    </dl>
+                </div>
+                <div class="cell w20p">
+                    <dl class="w5-5p">
+                        <dt><span>학부</span></dt>
+                        <dd><span>{{stdDept}}</span></dd>
+                    </dl>
+                </div>
+                <div class="cell w20p">
+                    <dl class="w5-5p">
+                        <dt><span>학년</span></dt>
+                        <dd><span>{{grade}}</span></dd>
+                    </dl>
+                </div>
+                <div class="cell w20p">
+                    <dl class="w5-5p">
+                        <dt><span>학적상태</span></dt>
+                        <dd><span>재학</span></dd>
+                    </dl>
+                </div>
+                <div class="cell w20p">
+                    <dl class="w5-5p">
+                        <dt><span>최대신청학점/이월학점</span></dt>
+                        <dd><span>{{maxCredits}}/0</span></dd>
+                    </dl>
+                </div>
+            </div>
+        </div>
+        <section class="nb-tab mt20">
+            <div class="nb-tabMenu">
+                <dl id="tab_title">
+                    <dd class="on">
+                        <label>
+                            <em>수강신청</em>
+                        </label>
+                    </dd>
+                    <dd class="">
+                        <label>
+                            <em>교과목 조회 및 신청</em>
+                        </label>
+                    </dd>
+                </dl>
+            </div>
+            <ul class="nb-tabContents" id="tab_contents">
+                <li class="on">
+                    <div class="nb-title page wid50">
+                        <h2><em>2022년도 1학기 수강신청기간 수강신청 정보</em></h2>
+                        <div class="help-block red">*재수강신청인 경우, [재수강]란에 붉은색으로 <span class="red">재수강</span>이라고 입력됩니다.</div>
+                        <!-- div class="help-block red">*지연신청의 시간이 표시될경우 해당 시간 이후에 신청 가능 합니다.</div>  -->
+                    </div>
+                    <div class="nb-title page wid50 VIEW_TAB_0" style="display: inline-block;">
+                        <div class="da-row-form">
+                            <div class="da-row">
+                                <div class="cell">
+                                    <dl class="w3-7p">
+                                        <dt><span>수강번호</span></dt>
+                                        <dd>
+                                            <div class="nb-inputText inline-btn1">
+                                                <div>
+                                                    <input name="strSbjt" type="text" placeholder="수강번호입력">
+                                                    <i></i>
+                                                </div>
+                                            </div>
+                                            <div class="nb-buttons nb-inline">
+                                                <div class="nb-btn-save nb-theme"><button type="button" id="btn_reg" style="cursor: pointer;">신청</button></div>
+                                            </div>
+                                        </dd>
+                                    </dl>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="nb-title page pt0">
+                        <h2><em>예비수강신청목록</em></h2>
+                        <div class="nb-buttons nb-inline right">
+                            <div class="nb-inputText">
+                                <label>총 신청학점 : </label>
+                                <div>
+                                    <input type="text" id="intPreAplyPntSum" style="max-width: 60px;" value="0.0" readonly="readonly">
+                                    <i></i>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="scroll-form">
+                        <table id="tbl_preTakingLesson" style="min-width: 1000px;">
+                            <caption>예비수강신청목록</caption>
+                            <colgroup>
+                                <col width="40px">
+                                <col width="10%">
+                                <col width="8%">
+                                <col width="150px">
+                                <col width="6%">
+                                <col width="4%">
+                                <col width="4%">
+                                <col width="4%">
+
+                                <col width="6%">
+
+                                <col width="10%">
+                                <col width="*">
+                                <!--
+                                <col width="8%">
+                                <col width="8%">
+                                -->
+                                <col width="4%">
+                                <col width="4%">
+                                <col width="4%">
+                                <col width="5%">
+                            </colgroup>
+                            <thead>
+                                <tr>
+                                    <th>번호</th>
+                                    <th>신청/삭제</th>
+                                    <th>수강번호</th>
+                                    <th>과목명</th>
+                                    <th>재수강</th>
+                                    <th>학점</th>
+                                    <th>시간</th>
+                                    <th>반</th>
+
+                                    <th>교수명</th>
+
+                                    <th>강의실</th>
+                                    <th>강의시간</th>
+                                    <!--
+                                    <th>성적인정</th>
+                                    <th>과목코드</th>
+                                    -->
+                                    <th>정원</th>
+                                    <th>여석</th>
+                                    <th>예비신청</th>
+                                    <th>신청가능시간</th>
+                                </tr>
+                            </thead>
+                            <tbody>	<tr>         <td><span>1</span></td>         <td>             <div class="nb-buttons">             </div>         </td>         <td><span>F014</span></td>         <td><span>컴퓨터구조</span></td>         <td>         	<span class="red"></span>         </td>         <td><span>3</span></td>         <td><span>3</span></td>         <td><span>1</span></td>         <td><span>김상훈</span></td>         <td><span>팔1025</span></td>         <td><span>수B(팔1025) 금B(팔1025)</span></td>         <td><span>5</span></td>         <td><span>5</span></td>         <td><span>56</span></td>         <td><span></span></td>     </tr> 	<tr>         <td><span>2</span></td>         <td>             <div class="nb-buttons">             </div>         </td>         <td><span>F024</span></td>         <td><span>자료구조</span></td>         <td>         	<span class="red"></span>         </td>         <td><span>3</span></td>         <td><span>3</span></td>         <td><span>3</span></td>         <td><span>박진경</span></td>         <td><span>팔309</span></td>         <td><span>화F(팔309) 목E(팔309)</span></td>         <td><span>5</span></td>         <td><span>5</span></td>         <td><span>21</span></td>         <td><span></span></td>     </tr> 	<tr>         <td><span>3</span></td>         <td>             <div class="nb-buttons">             </div>         </td>         <td><span>F048</span></td>         <td><span>시스템프로그래밍및실습</span></td>         <td>         	<span class="red"></span>         </td>         <td><span>4</span></td>         <td><span>5</span></td>         <td><span>1</span></td>         <td><span>고영배</span></td>         <td><span>팔309,팔328</span></td>         <td><span>월12:00~13:30 (팔309) 수12:00~13:30 (팔309) 목4(팔328) 목5(팔328)</span></td>         <td><span>0</span></td>         <td><span>0</span></td>         <td><span>20</span></td>         <td><span></span></td>     </tr> </tbody></table>
+                    </div>
+
+                    <div class="nb-title page">
+                        <h2><em>수강신청목록</em></h2>
+                        <div class="nb-buttons nb-inline right">
+                            <div class="nb-inputText">
+                                <label>총 신청학점 : </label>
+                                <div>
+                                    <input type="text" id="intAplyPntSum" style="max-width: 60px;" value="0.0" readonly="readonly">
+                                    <i></i>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="scroll-form">
+                        <table id="tbl_takingLesson" style="min-width: 1000px;">
+                            <caption>수강신청목록</caption>
+                            <colgroup>
+                                <col width="40px">
+                                <col width="70px">
+                                <col width="8%">
+                                <col width="150px">
+                                <col width="5%">
+                                <col width="4%">
+                                <col width="4%">
+                                <col width="4%">
+                                <col width="8%">
+                                <col width="*">
+                                <col width="8%">
+                                <col width="8%">
+                                <!--
+                                <col width="8%">
+                                -->
+                            </colgroup>
+                            <thead>
+                                <tr>
+                                    <th>번호</th>
+                                    <th>삭제</th>
+                                    <th>수강번호</th>
+                                    <th>과목명</th>
+                                    <th>재수강</th>
+                                    <th>학점</th>
+                                    <th>시간</th>
+                                    <th>반</th>
+                                    <th>강의실</th>
+                                    <th>강의시간</th>
+                                    <th>성적인정</th>
+                                    <th>석사신청서</th>
+                                    <!--
+                                    <th>과목코드</th>
+                                    -->
+                                </tr>
+                            </thead>
+                            <tbody><tr><td colspan="12" class="notice-message"><span>조회된 데이터가 없습니다.</span></td></tr></tbody></table>
+                    </div>
+
+
+                    <div class="nb-title page VIEW_TAB_1" style="display: none;">
+                        <h2><em>2022년도 1학기 수강신청기간 개설강의 조회</em></h2>
+                    </div>
+                    <div class="da-row-form VIEW_TAB_1" style="display: none;">
+                        <div class="da-row">
+                            <div class="cell">
+                                <dl class="w3-7p">
+                                    <dt><span>교과구분</span></dt>
+                                    <dd>
+                                        <div class="nb-select">
+                                            <div>
+                                                <select name="strSubmattFg">
+                                                	<option value="00" selected="">&lt;구분선택&gt;</option>
+
+                                                	<option value="U0209029">일선과목</option>
+
+                                                	<option value="U0209001">전공과목</option>
+
+                                                	<option value="U0209002">교양과목</option>
+
+                                                	<option value="U0209003">기초과목</option>
+
+                                                	<option value="U0209005">영역별교양</option>
+
+                                                </select>
+                                                <i></i>
+                                            </div>
+                                        </div>
+                                    </dd>
+                                </dl>
+                            </div>
+                            <div class="cell">
+                                <dl class="w3-7p">
+                                    <dt><span>학부(전공)</span></dt>
+                                    <dd>
+                                        <div class="nb-select inline-btn1">
+                                            <div>
+                                                <select name="strSustMjCd">
+                                                <option value="">&lt;전공선택&gt;</option><option value="DS030020202">ICT융합전공(과)</option><option value="DS03004022001">e-비즈니스학전공(과)</option><option value="DS03009001001">간호학전공(과)</option><option value="DS03009002001">간호학전공(특별과정)(과)</option><option value="DS03001027001">건설시스템공학전공(과)</option><option value="DS03001029001">건축공학전공(과)</option><option value="DS03001029003">건축학전공(5년)(과)</option><option value="DS03004021001">경영학전공(과)</option><option value="DS03006021001">경제학전공(과)</option><option value="DS03002025001">공군ICT전공(과)</option><option value="DS03001028001">교통시스템공학전공(과)</option><option value="DS03005021001">국어국문학전공(과)</option><option value="DS03012001001">국제통상전공(과)</option><option value="DS030020203">글로벌IT전공(과)</option><option value="DS03004024001">글로벌경영학전공(과)</option><option value="DS03004023001">금융공학전공(과)</option><option value="DS03001021001">기계공학전공(과)</option><option value="DS0300202404">디지털미디어전공(과)</option><option value="DS03006027001">문화산업과커뮤니케이션전공(과)</option><option value="DS03005025001">문화콘텐츠학전공(과)</option><option value="DS03003022001">물리학전공(과)</option><option value="DS03001031001">미래자동차 연계전공(과)</option><option value="DS03005023001">불어불문학전공(과)</option><option value="DS030020101">사이버보안전공(과)</option><option value="DS03005024001">사학전공(과)</option><option value="DS03006024001">사회학전공(과)</option><option value="DS03001022001">산업공학전공(과)</option><option value="DS03003024001">생명과학전공(과)</option><option value="DS030020201">소프트웨어및컴퓨터공학전공(과)</option><option value="DS03002023001">소프트웨어융합전공(과)</option><option value="DS03003021001">수학전공(과)</option><option value="DS03006026001">스포츠레저학전공(과)</option><option value="DS03001024001">신소재공학전공(과)</option><option value="DS03006023001">심리학전공(과)</option><option value="DS03013021001">약학전공(과)</option><option value="DS03005022001">영어영문학전공(과)</option><option value="DS03001030001">융합시스템공학전공(과)</option><option value="DS03001025001">응용화학생명공학전공(과)</option><option value="DS03008002001">의학전공(과)</option><option value="DS03002026001">인공지능융합전공(과)</option><option value="DS030020301">인문사회데이터분석전공(과)</option><option value="DS03012001003">일본지역연구전공(과)</option><option value="DS030020401">자동차SW전공(과)</option><option value="DS03002021001">전자공학전공(과)</option><option value="DS03006025001">정치외교학전공(과)</option><option value="DS03012001002">중국지역연구전공(과)</option><option value="DS03012001006">한국학전공(과)</option><option value="DS03006022001">행정학전공(과)</option><option value="DS03001023001">화학공학전공(과)</option><option value="DS03003023001">화학전공(과)</option><option value="DS03001026001">환경안전공학전공(과)</option></select>
+                                                <i></i>
+                                            </div>
+                                        </div>
+                                        <div class="nb-buttons nb-inline">
+                                            <div class="nb-btn-save"><button type="button" id="btn_search" style="cursor: pointer;">조회</button></div>
+                                        </div>
+                                    </dd>
+                                </dl>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="nb-title page VIEW_TAB_1" style="display: none;">
+                        <h2><em>개설강의목록</em></h2>
+                        <div class="nb-buttons nb-inline right">
+                            <div class="nb-btn-save">
+                                <button type="button" id="btnComment" style="cursor: pointer;">기초과목 수강안내 (2003 이전학번)</button>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="scroll-form VIEW_TAB_1" style="display: none;">
+                        <table id="tbl_lecture" style="min-width: 1000px;">
+                            <caption>2019년도 1학기 개설강의목록</caption>
+                            <colgroup>
+                                <col width="40px">
+                                <col width="70px">
+                                <col width="8%">
+                                <col width="8%">
+                                <col width="150px">
+                                <col width="4%">
+                                <col width="4%">
+                                <col width="4%">
+                                <col width="4%">
+                                <col width="8%">
+                                <col width="*">
+                                <col width="8%">
+                                <col width="4%">
+                                <col width="4%">
+                                <col width="4%">
+                                <col width="5%">
+                            </colgroup>
+                            <thead>
+                                <tr>
+                                    <th>번호</th>
+                                    <th>신청</th>
+                                    <th>수강번호</th>
+                                    <th>과목코드</th>
+                                    <th>과목명</th>
+                                    <th>학수</th>
+                                    <th>학점</th>
+                                    <th>시간</th>
+                                    <th>반</th>
+                                    <th>교수명</th>
+                                    <th>강의시간</th>
+                                    <th>강의실</th>
+                                    <th>정원</th>
+                                    <th>여석</th>
+                                    <th>예비신청</th>
+                                    <th>신청가능시간</th>
+                                </tr>
+                            </thead>
+                            <tbody><tr><td colspan="16" class="notice-message"><span>조회된 데이터가 없습니다.</span></td></tr></tbody></table>
+                    </div>
+                </li>
+            </ul>
+            <div class="help-block">
+                <span class="red">* 수강신청 완료 후 수강신청된 과목을 "수강신청내역"에서 한번 더 확인하시기 바랍니다.</span><br>
+                <span class="blue">* 대체과목인 경우 재수강을 클릭시 “재수강” 또는 “추가수강(별도학점인정)”을 선택할 수 있으니 반드시 확인 후 신청하시기 바랍니다.</span><br>
+                <span class="blue">* 대학원과목 신청자의 경우 대학원 교과목 수강신청후, 수강신청목록 오른쪽에서 학부/대학원 선택후 석사학위 수강신청서 출력한후 교무팀 제출하기 바랍니다.</span>
+            </div>
+        </section>
+    </form>
+    <form name="tlsnForm">
+		<input type="hidden" name="strTlsnNo" value="f048">
+		<input type="hidden" name="strSubmattFg">
+		<input type="hidden" name="strSustMjCd">
+    </form>
+    <form name="cancelApplication">
+		<input type="hidden" name="strStdNo" value="{{stdNumber}}">
+		<input type="hidden" name="strTlsnNo" value="M006">
+		<input type="hidden" name="strOpenLtNo" value="202200911">
+		<input type="hidden" name="strClssNo" value="1">
+		<input type="hidden" name="strLtYy" value="2022">
+		<input type="hidden" name="strLtShtmCd" value="U0002001">
+    </form>
+	<form name="sngjDetmForm" method="post">
+		<input type="hidden" name="strOpenLtNo">
+		<input type="hidden" name="strClssNo">
+		<input type="hidden" name="strSngjDetmFg">
+	</form>
+
+<script type="text/javascript">
+var strUserNo = '{{stdNumber}}';
+
+/* ======================================================================
+Variable :  소속구분-학부
+====================================================================== */
+var sustCdMap = new Object();
+
+var DS03 = new Array();
+DS03.push(['00','[공통]']);
+DS03.push(['DS03001021','기계공학과']);
+DS03.push(['DS03001022','산업공학과']);
+DS03.push(['DS03001023','화학공학과']);
+DS03.push(['DS03001024','신소재공학과']);
+DS03.push(['DS03001025','응용화학생명공학과']);
+DS03.push(['DS03001026','환경안전공학과']);
+DS03.push(['DS03001027','건설시스템공학과']);
+DS03.push(['DS03001028','교통시스템공학과']);
+DS03.push(['DS03001029','건축학과']);
+DS03.push(['DS03002021','전자공학과']);
+DS03.push(['DS0300202','{{stdDept}}']);
+DS03.push(['DS03002024','미디어학과']);
+DS03.push(['DS03002026','인공지능융합학과']);
+DS03.push(['DS03002025','국방디지털융합학과']);
+DS03.push(['DS0300201','사이버보안학과']);
+DS03.push(['DS03003021','수학과']);
+DS03.push(['DS03003022','물리학과']);
+DS03.push(['DS03003023','화학과']);
+DS03.push(['DS03003024','생명과학과']);
+DS03.push(['DS03004021','경영학과']);
+DS03.push(['DS03004022','e-비즈니스학과']);
+DS03.push(['DS03004023','금융공학과']);
+DS03.push(['DS03004024','글로벌경영학과']);
+DS03.push(['DS03005021','국어국문학과']);
+DS03.push(['DS03005022','영어영문학과']);
+DS03.push(['DS03005023','불어불문학과']);
+DS03.push(['DS03005024','사학과']);
+DS03.push(['DS03005025','문화콘텐츠학과']);
+DS03.push(['DS03006021','경제학과']);
+DS03.push(['DS03006022','행정학과']);
+DS03.push(['DS03006023','심리학과']);
+DS03.push(['DS03006024','사회학과']);
+DS03.push(['DS03006025','정치외교학과']);
+DS03.push(['DS03006026','스포츠레저학과']);
+DS03.push(['DS03008002','의학과']);
+DS03.push(['DS03009001','간호학과']);
+DS03.push(['DS03009002','간호학과(특별과정)']);
+DS03.push(['DS03013021','약학과']);
+DS03.push(['DS03012001','국제학부']);
+DS03.push(['DS03006027','문화산업과 커뮤니케이션전공']);
+DS03.push(['DS0300203','인문사회데이터분석전공']);
+DS03.push(['DS03002023','소프트웨어융합학과']);
+DS03.push(['DS03001031','미래자동차 연계전공']);
+DS03.push(['DS0300204','자동차SW전공']);
+DS03.push(['DS03001030','융합시스템공학과']);
+
+sustCdMap["DS03"] = DS03;
+
+var DS04001 = new Array();
+DS04001.push(['00','[공통]']);
+
+sustCdMap["DS04001"] = DS04001;
+
+var DS04005 = new Array();
+DS04005.push(['00','[공통]']);
+
+sustCdMap["DS04005"] = DS04005;
+
+var DS04006 = new Array();
+DS04006.push(['00','[공통]']);
+
+sustCdMap["DS04006"] = DS04006;
+
+var DS04007 = new Array();
+DS04007.push(['00','[공통]']);
+
+sustCdMap["DS04007"] = DS04007;
+
+var DS04008 = new Array();
+DS04008.push(['00','[공통]']);
+
+sustCdMap["DS04008"] = DS04008;
+
+var DS04009 = new Array();
+DS04009.push(['00','[공통]']);
+
+sustCdMap["DS04009"] = DS04009;
+
+var DS04010 = new Array();
+DS04010.push(['00','[공통]']);
+
+sustCdMap["DS04010"] = DS04010;
+
+var DS04011 = new Array();
+DS04011.push(['00','[공통]']);
+
+sustCdMap["DS04011"] = DS04011;
+
+var DS04012 = new Array();
+DS04012.push(['00','[공통]']);
+
+sustCdMap["DS04012"] = DS04012;
+
+var DS04013 = new Array();
+DS04013.push(['00','[공통]']);
+
+sustCdMap["DS04013"] = DS04013;
+
+var DS04002 = new Array();
+DS04002.push(['00','[공통]']);
+
+sustCdMap["DS04002"] = DS04002;
+
+var DS04003 = new Array();
+DS04003.push(['00','[공통]']);
+
+sustCdMap["DS04003"] = DS04003;
+
+var DS04004 = new Array();
+DS04004.push(['00','[공통]']);
+
+sustCdMap["DS04004"] = DS04004;
+
+var DS04020 = new Array();
+DS04020.push(['00','[공통]']);
+
+sustCdMap["DS04020"] = DS04020;
+
+var DS04017 = new Array();
+DS04017.push(['00','[공통]']);
+
+sustCdMap["DS04017"] = DS04017;
+
+var DS04018 = new Array();
+DS04018.push(['00','[공통]']);
+
+sustCdMap["DS04018"] = DS04018;
+
+var DS04019 = new Array();
+DS04019.push(['00','[공통]']);
+
+sustCdMap["DS04019"] = DS04019;
+
+
+/* ======================================================================
+Variable :  대학(원)-전공
+====================================================================== */
+var mjCdMap = new Object();
+
+var DS03 = new Array();
+DS03.push(['DS03001021001','기계공학전공(과)']);
+DS03.push(['DS03001022001','산업공학전공(과)']);
+DS03.push(['DS03001023001','화학공학전공(과)']);
+DS03.push(['DS03001024001','신소재공학전공(과)']);
+DS03.push(['DS03001025001','응용화학생명공학전공(과)']);
+DS03.push(['DS03001026001','환경안전공학전공(과)']);
+DS03.push(['DS03001027001','건설시스템공학전공(과)']);
+DS03.push(['DS03001028001','교통시스템공학전공(과)']);
+DS03.push(['DS03001029003','건축학전공(5년)(과)']);
+DS03.push(['DS03001029001','건축공학전공(과)']);
+DS03.push(['DS03002021001','전자공학전공(과)']);
+DS03.push(['DS030020201','소프트웨어및컴퓨터공학전공(과)']);
+DS03.push(['DS030020101','사이버보안전공(과)']);
+DS03.push(['DS0300202404','디지털미디어전공(과)']);
+DS03.push(['DS03002025001','공군ICT전공(과)']);
+DS03.push(['DS030020202','ICT융합전공(과)']);
+DS03.push(['DS030020203','글로벌IT전공(과)']);
+DS03.push(['DS03002026001','인공지능융합전공(과)']);
+DS03.push(['DS03003021001','수학전공(과)']);
+DS03.push(['DS03003022001','물리학전공(과)']);
+DS03.push(['DS03003023001','화학전공(과)']);
+DS03.push(['DS03003024001','생명과학전공(과)']);
+DS03.push(['DS03004021001','경영학전공(과)']);
+DS03.push(['DS03004022001','e-비즈니스학전공(과)']);
+DS03.push(['DS03004023001','금융공학전공(과)']);
+DS03.push(['DS03004024001','글로벌경영학전공(과)']);
+DS03.push(['DS03005021001','국어국문학전공(과)']);
+DS03.push(['DS03005022001','영어영문학전공(과)']);
+DS03.push(['DS03005023001','불어불문학전공(과)']);
+DS03.push(['DS03005024001','사학전공(과)']);
+DS03.push(['DS03005025001','문화콘텐츠학전공(과)']);
+DS03.push(['DS03006021001','경제학전공(과)']);
+DS03.push(['DS03006022001','행정학전공(과)']);
+DS03.push(['DS03006023001','심리학전공(과)']);
+DS03.push(['DS03006024001','사회학전공(과)']);
+DS03.push(['DS03006025001','정치외교학전공(과)']);
+DS03.push(['DS03006026001','스포츠레저학전공(과)']);
+DS03.push(['DS03008002001','의학전공(과)']);
+DS03.push(['DS03009001001','간호학전공(과)']);
+DS03.push(['DS03009002001','간호학전공(특별과정)(과)']);
+DS03.push(['DS03013021001','약학전공(과)']);
+DS03.push(['DS03012001006','한국학전공(과)']);
+DS03.push(['DS03012001001','국제통상전공(과)']);
+DS03.push(['DS03006027001','문화산업과커뮤니케이션전공(과)']);
+DS03.push(['DS03012001002','중국지역연구전공(과)']);
+DS03.push(['DS03012001003','일본지역연구전공(과)']);
+DS03.push(['DS030020301','인문사회데이터분석전공(과)']);
+DS03.push(['DS03002023001','소프트웨어융합전공(과)']);
+DS03.push(['DS03001030001','융합시스템공학전공(과)']);
+DS03.push(['DS03001031001','미래자동차 연계전공(과)']);
+DS03.push(['DS030020401','자동차SW전공(과)']);
+
+mjCdMap["DS03"] = DS03;
+
+var DS04001 = new Array();
+DS04001.push(['DS04001048001','NCW학협동과정']);
+DS04001.push(['DS04001011001','간호학전공']);
+DS04001.push(['DS04001017013','건강심리학전공']);
+DS04001.push(['DS04001064001','건설교통공학과정전공']);
+DS04001.push(['DS04001002001','건축공학전공']);
+DS04001.push(['DS04001040001','우주전자정보공학전공']);
+DS04001.push(['DS04001001001','건축학전공']);
+DS04001.push(['DS04001025001','경영전략전공']);
+DS04001.push(['DS04001025007','경영정보전공']);
+DS04001.push(['DS04001024001','경영정보학전공']);
+DS04001.push(['DS04001014001','경제학전공']);
+DS04001.push(['DS04001060001','공업화학전공']);
+DS04001.push(['DS04001044014','공업화학전공(분)']);
+DS04001.push(['DS04001047002','교육과정및평가전공']);
+DS04001.push(['DS04001047004','교육상담및심리전공']);
+DS04001.push(['DS04001047003','교육정책및경영전공']);
+DS04001.push(['DS04001003003','교통공학전공']);
+DS04001.push(['DS04001062001','교통공학전공(교통)']);
+DS04001.push(['DS04001020001','국어국문학전공']);
+DS04001.push(['DS04001049001','금융공학전공']);
+DS04001.push(['DS04001025003','재무전공']);
+DS04001.push(['DS04001043001','금융공학협동전공(공)']);
+DS04001.push(['DS04001032002','금융보안전공']);
+DS04001.push(['DS04001910001','글로벌경영학전공']);
+DS04001.push(['DS04001050001','금융보안전공']);
+DS04001.push(['DS04001008001','기계공학전공']);
+DS04001.push(['DS04001036001','기술경영전공']);
+DS04001.push(['DS04001010001','나노정보융합기술전공']);
+DS04001.push(['DS04001081001','도시개발학전공']);
+DS04001.push(['DS04001025006','마케팅전공']);
+DS04001.push(['DS04001026001','물리학전공']);
+DS04001.push(['DS04001044007','물리학전공(이)']);
+DS04001.push(['DS04001030001','미디어학전공']);
+DS04001.push(['DS04001015001','법학전공']);
+DS04001.push(['DS04001044001','분자과학기술전공']);
+DS04001.push(['DS04001013005','분자의학전공(의)']);
+DS04001.push(['DS04001013002','분자의학전공(이)']);
+DS04001.push(['DS04001044006','분자재료공학전공(공)']);
+DS04001.push(['DS04001023001','불어불문학전공']);
+DS04001.push(['DS04001022001','사학전공']);
+DS04001.push(['DS04001013007','사회보건학(의)']);
+DS04001.push(['DS04001013004','사회보건학(이)']);
+DS04001.push(['DS04001017002','사회심리전공']);
+DS04001.push(['DS04001066001','사회학전공']);
+DS04001.push(['DS04001016003','사회학전공']);
+DS04001.push(['DS04001007001','산업공학전공']);
+DS04001.push(['DS04001007002','과학기술정책전공']);
+DS04001.push(['DS04001017011','산업및조직심리전공']);
+DS04001.push(['DS04001017009','상담심리전공']);
+DS04001.push(['DS04001029001','생명과학전공']);
+DS04001.push(['DS04001057001','생물공학전공']);
+DS04001.push(['DS04001044011','생물공학전공(공)']);
+DS04001.push(['DS04001025005','MS/OM전공']);
+DS04001.push(['DS04001044005','생체소재전공(공)']);
+DS04001.push(['DS04001017012','성인임상심리전공']);
+DS04001.push(['DS04001017006','소비자광고심리전공']);
+DS04001.push(['DS04001028001','수학전공']);
+DS04001.push(['DS04001046001','시스템공학전공']);
+DS04001.push(['DS04001034001','신경과학기술전공(의)']);
+DS04001.push(['DS04001013006','신경과학전공(의)']);
+DS04001.push(['DS04001013003','신경과학전공(이)']);
+DS04001.push(['DS04001017001','심리학전공']);
+DS04001.push(['DS04001017008','아동/청소년임상심리전공']);
+DS04001.push(['DS04001067001','언어공학전공']);
+DS04001.push(['DS04001045005','에너지시스템전공']);
+DS04001.push(['DS04001045004','에너지전공(공)']);
+DS04001.push(['DS04001045006','에너지전공(경제)']);
+DS04001.push(['DS04001063001','에너지학전공']);
+DS04001.push(['DS04001021003','영미문화학전공']);
+DS04001.push(['DS04001041001','영상표시전공']);
+DS04001.push(['DS04001021004','영어교육전공']);
+DS04001.push(['DS04001021001','영어영문학전공']);
+DS04001.push(['DS04001040002','우주측지학전공']);
+DS04001.push(['DS04001044010','응용물리전공(공)']);
+DS04001.push(['DS04001044004','응용물리전공(이)']);
+DS04001.push(['DS04001045001','응용물리전공(이)']);
+DS04001.push(['DS04001016001','응용사회과학전공']);
+DS04001.push(['DS04001016004','응용사회학전공']);
+DS04001.push(['DS04001039001','응용생명공학전공']);
+DS04001.push(['DS04001017005','응용인지심리전공']);
+DS04001.push(['DS04001045002','응용화학전공(이)']);
+DS04001.push(['DS04001044009','의과학(이)']);
+DS04001.push(['DS04001038001','의용공학전공']);
+DS04001.push(['DS04001102001','의용공학(공)']);
+DS04001.push(['DS04001038002','의료기기산업학전공(공)']);
+DS04001.push(['DS04001044008','의용생체공학']);
+DS04001.push(['DS04001102002','의료기기산업학전공(공)']);
+DS04001.push(['DS04001038003','의료기기산업학전공(이)']);
+DS04001.push(['DS04001102003','의료기기산업학전공(이)']);
+DS04001.push(['DS04001012002','의학전공(의)']);
+DS04001.push(['DS04001038004','의료기기산업학전공(의)']);
+DS04001.push(['DS04001102004','의료기기산업학전공(의)']);
+DS04001.push(['DS04001012006','의학전공(이)']);
+DS04001.push(['DS04001038005','디지털헬스케어전공(의)']);
+DS04001.push(['DS04001102005','디지털헬스케어전공(의)']);
+DS04001.push(['DS04001038006','디지털헬스케어전공(이)']);
+DS04001.push(['DS04001044012','의학화학전공(분)']);
+DS04001.push(['DS04001102006','디지털헬스케어전공(이)']);
+DS04001.push(['DS04001025004','인사조직전공']);
+DS04001.push(['DS04001038007','디지털헬스케어전공(공)']);
+DS04001.push(['DS04001102007','디지털헬스케어전공(공)']);
+DS04001.push(['DS04001017004','인지/언어심리전공']);
+DS04001.push(['DS04001038008','임상연구설계전공(의)']);
+DS04001.push(['DS04001102008','임상연구설계전공(의)']);
+DS04001.push(['DS04001017010','인지심리전공']);
+DS04001.push(['DS04001038009','임상연구설계전공(이)']);
+DS04001.push(['DS04001102009','임상연구설계전공(이)']);
+DS04001.push(['DS04001017003','임상심리전공']);
+DS04001.push(['DS04001038010','임상연구설계전공(공)']);
+DS04001.push(['DS04001102010','임상연구설계전공(공)']);
+DS04001.push(['DS04001006001','재료공학전공']);
+DS04001.push(['DS04001044003','재료화학전공(공)']);
+DS04001.push(['DS04001044002','재료화학전공(이)']);
+DS04001.push(['DS04001011002','전문간호사과정']);
+DS04001.push(['DS04001031001','전자공학전공']);
+DS04001.push(['DS04001061001','전파공학전공']);
+DS04001.push(['DS04001065001','정보과학전공']);
+DS04001.push(['DS04001012008','정보의학전공(의)']);
+DS04001.push(['DS04001012011','사회보건학(의)']);
+DS04001.push(['DS04001012012','사회보건학(이)']);
+DS04001.push(['DS04001018001','정치외교학전공']);
+DS04001.push(['DS04001012014','건강노화의과학(의)']);
+DS04001.push(['DS04001016005','정치학전공']);
+DS04001.push(['DS04001012013','건강노화의과학(이)']);
+DS04001.push(['DS04001031002','제어계측공학전공']);
+DS04001.push(['DS04001012015','융합의생명(의)']);
+DS04001.push(['DS04001058001','제어계측공학전공']);
+DS04001.push(['DS04001012016','융합의생명(이)']);
+DS04001.push(['DS04001012017','중개의학전공(의)']);
+DS04001.push(['DS04001012018','중개의학전공(이)']);
+DS04001.push(['DS04001037001','지역연구학전공']);
+DS04001.push(['DS04001017007','직업및진로심리전공']);
+DS04001.push(['DS04001032001','컴퓨터공학전공']);
+DS04001.push(['DS04001003002','토목공학전공']);
+DS04001.push(['DS04001021002','통/번역전공']);
+DS04001.push(['DS04001047001','평생교육및HRD전공']);
+DS04001.push(['DS04001022002','한국사(고고학전공)']);
+DS04001.push(['DS04001035001','한국학전공']);
+DS04001.push(['DS04001019001','행정학전공']);
+DS04001.push(['DS04001016002','행정학전공']);
+DS04001.push(['DS04001032003','홈네트워크보안']);
+DS04001.push(['DS04001050002','홈네트워크보안전공']);
+DS04001.push(['DS04001045003','에너지화학공학전공']);
+DS04001.push(['DS04001050003','모바일보안전공']);
+DS04001.push(['DS04001039002','화장품과학전공(이)']);
+DS04001.push(['DS04001005001','화학공학전공']);
+DS04001.push(['DS04001027001','화학전공']);
+DS04001.push(['DS04001044013','화학전공(분)']);
+DS04001.push(['DS04001004001','환경공학전공']);
+DS04001.push(['DS04001025002','회계전공']);
+DS04001.push(['DS04001089001','환경안전공학전공']);
+DS04001.push(['DS04001007003','적합성평가전공']);
+DS04001.push(['DS040010101','데이터사이언스전공']);
+DS04001.push(['DS04001013008','종양생물학(의)']);
+DS04001.push(['DS04001013009','종양생물학(이)']);
+DS04001.push(['DS04001013010','의생명정보전공(의)']);
+DS04001.push(['DS04001013011','의생명정보전공(이)']);
+DS04001.push(['DS04001013012','융합의학전공(의)']);
+DS04001.push(['DS04001013013','융합의학전공(이)']);
+DS04001.push(['DS04001013014','의약학전공']);
+DS04001.push(['DS04001020002','한국어교육전공']);
+DS04001.push(['DS04001022003','고고학전공']);
+DS04001.push(['DS04001022004','한국사전공']);
+DS04001.push(['DS04001025008','글로벌경영전공']);
+DS04001.push(['DS04001028002','데이터사이언스전공']);
+DS04001.push(['DS04001034002','신경과학기술전공(이)']);
+DS04001.push(['DS04001043002','금융공학협동전공(이)']);
+DS04001.push(['DS04001043003','금융공학협동전공(경영)']);
+DS04001.push(['DS04001043004','금융공학협동전공(경제)']);
+DS04001.push(['DS04001044015','응용화학(공)']);
+DS04001.push(['DS04001044016','생명공학(공)']);
+DS04001.push(['DS04001044018','약학(이)']);
+DS04001.push(['DS04001045007','에너지재료공학전공']);
+DS04001.push(['DS04001045008','에너지환경공학전공']);
+DS04001.push(['DS04001045009','에너지물리전공']);
+DS04001.push(['DS0400104510','에너지화학전공']);
+DS04001.push(['DS04001048002','사이버전']);
+DS04001.push(['DS04001050004','유비쿼터스소프트웨어전공']);
+DS04001.push(['DS04001050005','모바일융합전공']);
+DS04001.push(['DS0400105006','IoT전공']);
+DS04001.push(['DS0400105007','산업보안전공']);
+DS04001.push(['DS04001084001','소프트웨어학전공']);
+DS04001.push(['DS04001085001','유비쿼터스소프트웨어전공']);
+DS04001.push(['DS04001085002','모바일보안전공']);
+DS04001.push(['DS04001086001','지역문화전공']);
+DS04001.push(['DS04001086002','콘텐츠산업전공']);
+DS04001.push(['DS04001087001','의약생명과학(의)']);
+DS04001.push(['DS04001087002','의약생명과학(이)']);
+DS04001.push(['DS04001087003','의약생명과학(공)']);
+DS04001.push(['DS04001087004','의료정보학(의)']);
+DS04001.push(['DS04001087005','의료정보학(공)']);
+DS04001.push(['DS04001087006','의료정보학(이)']);
+DS04001.push(['DS04001088001','미디어콘텐츠']);
+DS04001.push(['DS04001088002','IT심리']);
+DS04001.push(['DS04001090001','디지털휴머니티전공']);
+DS04001.push(['DS04001090002','의료인문융합전공']);
+DS04001.push(['DS04001090003','의료인문정신분석전공']);
+DS04001.push(['DS04001091001','토목공학전공(토목)']);
+DS04001.push(['DS04001092001','신소재공학전공']);
+DS04001.push(['DS04001093001','IT융합전공']);
+DS04001.push(['DS04001093002','사이버전전공']);
+DS04001.push(['DS04001094001','인공지능·데이터사이언스전공']);
+DS04001.push(['DS04001095001','건축학전공']);
+DS04001.push(['DS04001095002','건축공학전공']);
+DS04001.push(['DS04001096001','인공지능전공']);
+DS04001.push(['DS04001097001','AI융합네트워크전공']);
+DS04001.push(['DS04001097002','컴퓨터공학및보안전공']);
+DS04001.push(['DS04001097003','전자공학전공']);
+DS04001.push(['DS04001097004','산업공학전공']);
+DS04001.push(['DS04001098001','에너지전공(공)']);
+DS04001.push(['DS04001098002','에너지전공(이)']);
+DS04001.push(['DS04001098003','에너지전공(인)']);
+DS04001.push(['DS04001099001','비즈니스애널리틱스전공']);
+DS04001.push(['DS04001100001','사이버보안전공']);
+DS04001.push(['DS04001101001','바이오헬스규제과학전공']);
+DS04001.push(['DS04001909001','약학전공']);
+DS04001.push(['DS04001909002','바이오헬스규제과학전공']);
+
+mjCdMap["DS04001"] = DS04001;
+
+var DS04005 = new Array();
+DS04005.push(['DS04005002001','국제경영학전공']);
+DS04005.push(['DS04005009001','국제통상전공']);
+DS04005.push(['DS04005003001','NGO 전공']);
+DS04005.push(['DS04005013001','국제개발협력학전공']);
+DS04005.push(['DS04005017001','에너지과학정책전공']);
+DS04005.push(['DS04005002002','Information Technology']);
+DS04005.push(['DS04005002003','Nano Technology']);
+DS04005.push(['DS04005002004','Bio Technology']);
+DS04005.push(['DS04005002005','Energy Technology']);
+DS04005.push(['DS04005004001','한국학전공']);
+DS04005.push(['DS04005005001','지역연구학전공']);
+DS04005.push(['DS04005006001','정보통신공학전공']);
+DS04005.push(['DS04005007001','전자공학전공']);
+DS04005.push(['DS04005008001','기계공학전공']);
+DS04005.push(['DS04005008002','산업공학전공']);
+DS04005.push(['DS04005009002','국제통상정책전공']);
+DS04005.push(['DS04005010001','정보통신전공']);
+DS04005.push(['DS040050101','캄보디아 금융인력 양성과정']);
+DS04005.push(['DS04005011001','경영학전공']);
+DS04005.push(['DS04005012001','국제경제학전공']);
+DS04005.push(['DS04005014001','코이카 한국어일반 초급과정']);
+DS04005.push(['DS04005018001','시민사회전공']);
+DS04005.push(['DS04005018002','시민사회리더십전공']);
+
+mjCdMap["DS04005"] = DS04005;
+
+var DS04006 = new Array();
+DS04006.push(['DS04006002001','토목공학전공(건설)']);
+DS04006.push(['DS04006003001','환경안전공학전공']);
+DS04006.push(['DS04006004001','공업화학전공']);
+DS04006.push(['DS04006004002','생물공학전공']);
+DS04006.push(['DS04006005001','컴퓨터공학전공']);
+DS04006.push(['DS04006007001','최고경영자과정']);
+DS04006.push(['DS04006008001','정보전자공학전공']);
+DS04006.push(['DS04006009001','전자공학전공']);
+DS04006.push(['DS04006011001','산업시스템공학전공']);
+DS04006.push(['DS04006011002','산업공학전공']);
+DS04006.push(['DS04006011003','로지스틱스전공']);
+DS04006.push(['DS04006011004','품질시스템전공']);
+DS04006.push(['DS04006011005','산업안전공학전공']);
+DS04006.push(['DS04006011006','비즈니스정보공학전공']);
+DS04006.push(['DS04006012001','비지니스정보공학전공']);
+DS04006.push(['DS04006013001','기계공학전공']);
+DS04006.push(['DS04006013002','재료공학전공']);
+DS04006.push(['DS04006014001','도시개발전공']);
+DS04006.push(['DS04006014002','도시건축전공']);
+DS04006.push(['DS04006015001','산업공학전공']);
+DS04006.push(['DS04006016001','화학공학전공']);
+DS04006.push(['DS04006017001','건설공학전공']);
+DS04006.push(['DS04006018001','교통공학전공']);
+DS04006.push(['DS04006019001','산업안전전공']);
+DS04006.push(['DS040060201','라인최적화']);
+DS04006.push(['DS04006021001','토목공학전공(생물공)']);
+DS04006.push(['DS04006023001','제어계측전공']);
+DS04006.push(['DS04006024001','지식재산공학전공']);
+DS04006.push(['DS04006025001','전자전기공학전공']);
+DS04006.push(['DS04006026001','전자계산학전공']);
+DS04006.push(['DS04006027001','제어공학전공']);
+DS04006.push(['DS04006028001','공업화학전공']);
+DS04006.push(['DS04006029001','에너지학과']);
+DS04006.push(['DS04006029002','에너지경제학']);
+DS04006.push(['DS040060301','레올로지']);
+DS04006.push(['DS04006031001','가치혁신융합학']);
+DS04006.push(['DS04006032001','포장재금형개발']);
+DS04006.push(['DS04006033001','SE과정']);
+DS04006.push(['DS04006034001','로봇공학']);
+DS04006.push(['DS04006035001','교반공학']);
+DS04006.push(['DS040060401','유체역학']);
+DS04006.push(['DS04006280001','물류SCM학전공']);
+DS04006.push(['DS04006281001','설비레이아웃과사내물류혁신전공']);
+DS04006.push(['DS04006282001','전산유체역학전공']);
+
+mjCdMap["DS04006"] = DS04006;
+
+var DS04007 = new Array();
+DS04007.push(['DS04007002030','경영관리']);
+DS04007.push(['DS04007019001','최고경영자과정']);
+DS04007.push(['DS04007024002','경영관리']);
+DS04007.push(['DS04007002024','경영전략']);
+DS04007.push(['DS04007024003','경영전략']);
+DS04007.push(['DS04007002003','마케팅']);
+DS04007.push(['DS04007024004','마케팅']);
+DS04007.push(['DS04007002002','인사조직']);
+DS04007.push(['DS04007024006','인사조직']);
+DS04007.push(['DS04007002025','재무']);
+DS04007.push(['DS04007024007','재무']);
+DS04007.push(['DS04007002004','회계학']);
+DS04007.push(['DS04007024008','회계학']);
+DS04007.push(['DS04007002033','MS/OM']);
+DS04007.push(['DS04007024012','MS/OM']);
+DS04007.push(['DS04007002012','e-비즈니스MBA']);
+DS04007.push(['DS04007024009','e-비즈니스MBA']);
+DS04007.push(['DS04007002013','병원경영MBA']);
+DS04007.push(['DS04007024010','코칭']);
+DS04007.push(['DS04007002031','코칭']);
+DS04007.push(['DS04007024011','협상']);
+DS04007.push(['DS04007002032','협상']);
+DS04007.push(['DS04007024013','병원경영']);
+DS04007.push(['DS04007002001','경영일반MBA']);
+DS04007.push(['DS04007002902','ERP']);
+DS04007.push(['DS0400702414','ERP']);
+DS04007.push(['DS04007002034','IT비즈니스']);
+DS04007.push(['DS04007024015','IT비즈니스']);
+DS04007.push(['DS04007002035','헬스케어']);
+DS04007.push(['DS04007024016','헬스케어']);
+DS04007.push(['DS04007002036','창업벤처']);
+DS04007.push(['DS04007002037','연구기술경영']);
+DS04007.push(['DS04007002903','비즈니스애널리틱스']);
+DS04007.push(['DS04007002023','경영학과']);
+DS04007.push(['DS04007002007','경영과학MBA']);
+DS04007.push(['DS04007024001','벤처MBA']);
+DS04007.push(['DS04007024005','생산운영관리MBA']);
+DS04007.push(['DS04007002008','경영정보MBA']);
+DS04007.push(['DS04007002009','국제경영MBA']);
+DS04007.push(['DS04007002014','글로벌MBA']);
+DS04007.push(['DS04007002018','금융보험MBA']);
+DS04007.push(['DS04007002010','노사관계MBA']);
+DS04007.push(['DS04007002019','문화산업MBA']);
+DS04007.push(['DS04007002022','병원경영특별과정']);
+DS04007.push(['DS04007002006','생산,운영관리MBA']);
+DS04007.push(['DS04007002017','생산관리MBA']);
+DS04007.push(['DS04007002011','유통경영MBA']);
+DS04007.push(['DS04007002020','유통경영MBA']);
+DS04007.push(['DS04007002005','재무관리MBA']);
+DS04007.push(['DS04007002016','전략경영MBA']);
+DS04007.push(['DS04007002021','전문회계MBA']);
+DS04007.push(['DS04007002015','테크노MBA']);
+DS04007.push(['DS04007004001','인사조직MBA']);
+DS04007.push(['DS04007004002','정보통신경영MBA']);
+DS04007.push(['DS04007004003','투자금융MBA']);
+DS04007.push(['DS04007004004','회계학MBA']);
+DS04007.push(['DS04007004005','국제통상MBA']);
+DS04007.push(['DS04007004006','마케팅MBA']);
+DS04007.push(['DS04007004007','일반경영(서울)MBA']);
+DS04007.push(['DS04007005001','AICPA MBA']);
+DS04007.push(['DS04007006001','마케팅MBA']);
+DS04007.push(['DS04007006002','경영일반MBA']);
+DS04007.push(['DS04007006003','e-Business전략경영MBA']);
+DS04007.push(['DS04007006004','AICPA-MBA']);
+DS04007.push(['DS04007006005','회계학MBA']);
+DS04007.push(['DS04007006006','보험MBA']);
+DS04007.push(['DS04007006007','전문회계MBA']);
+DS04007.push(['DS04007006008','e-비즈니스MBA']);
+DS04007.push(['DS04007006009','공통']);
+DS04007.push(['DS04007006010','금융보험MBA']);
+DS04007.push(['DS04007006011','전략경영MBA']);
+DS04007.push(['DS04007006012','경영학과']);
+DS04007.push(['DS04007006013','경영전략MBA']);
+DS04007.push(['DS04007006014','재무MBA']);
+DS04007.push(['DS04007006016','인사조직MBA']);
+DS04007.push(['DS04007006017','경영관리MBA']);
+DS04007.push(['DS04007006018','MS/OM']);
+DS04007.push(['DS04007006019','코칭']);
+DS04007.push(['DS04007006020','협상']);
+DS04007.push(['DS04007006901','경영일반MBA']);
+DS04007.push(['DS04007007001','경영전문가MBA']);
+DS04007.push(['DS04007008001','경영관리자MBA']);
+DS04007.push(['DS04007010001','여성CEO경영아카데미']);
+DS04007.push(['DS04007011001','테크노-CEO MBA']);
+DS04007.push(['DS04007012001','투자유치경영전문가MBA']);
+DS04007.push(['DS04007014001','기술경영MBA']);
+DS04007.push(['DS04007021001','태평양-CEO MBA']);
+DS04007.push(['DS04007022001','실버복지경영CEO MBA']);
+DS04007.push(['DS04007023001','CEO골프아카데미과정']);
+
+mjCdMap["DS04007"] = DS04007;
+
+var DS04008 = new Array();
+DS04008.push(['DS04008002001','노동정책전공(특)']);
+DS04008.push(['DS04008003001','행정학전공']);
+DS04008.push(['DS04008003002','사회복지전공']);
+DS04008.push(['DS04008003003','일반행정·지방자치전공']);
+DS04008.push(['DS04008003004','사법공안행정전공']);
+DS04008.push(['DS04008003005','지방자치전공']);
+DS04008.push(['DS04008003006','법무행정전공']);
+DS04008.push(['DS04008004001','부동산전공']);
+DS04008.push(['DS04008004002','국제통상·재정전공']);
+DS04008.push(['DS04008004003','사회복지전공']);
+DS04008.push(['DS04008004004','보건의료전공']);
+DS04008.push(['DS04008004005','에너지환경교통정책전공']);
+DS04008.push(['DS04008004006','지역개발·문화관광정책전공']);
+DS04008.push(['DS04008004007','병원관리전공']);
+DS04008.push(['DS04008004008','정치거버넌스전공']);
+DS04008.push(['DS04008005001','부동산전공(특)']);
+DS04008.push(['DS04008006001','전자정부전공']);
+DS04008.push(['DS04008006002','행정학전공(C)']);
+DS04008.push(['DS04008006003','사회복지전공(C)']);
+DS04008.push(['DS04008008001','경기발전전공(특)']);
+DS04008.push(['DS04008009001','핵심리더양성과정(특)']);
+DS04008.push(['DS040080101','지역거버넌스전공']);
+DS04008.push(['DS040080201','지역경제전공']);
+DS04008.push(['DS040080301','지역거버넌스전공']);
+
+mjCdMap["DS04008"] = DS04008;
+
+var DS04009 = new Array();
+DS04009.push(['DS04009002002','교육행정전공']);
+DS04009.push(['DS04009002031','진로진학상담전공']);
+DS04009.push(['DS04009002001','국어교육전공']);
+DS04009.push(['DS04009002005','소프트웨어교육전공']);
+DS04009.push(['DS04009002004','상담심리전공']);
+DS04009.push(['DS04009002006','영어교육전공']);
+DS04009.push(['DS04009002007','수학교육전공']);
+DS04009.push(['DS04009002008','역사교육전공']);
+DS04009.push(['DS04009002011','평생교육전공']);
+DS04009.push(['DS04009002015','대학행정관리전공']);
+DS04009.push(['DS04009002016','유아교육전공']);
+DS04009.push(['DS04009002017','특수교육전공']);
+DS04009.push(['DS04009002019','초등영어교육전공']);
+DS04009.push(['DS04009002021','e-learning전공']);
+DS04009.push(['DS04009002022','공통과학교육전공']);
+DS04009.push(['DS04009002025','TESOL(교육학과)']);
+DS04009.push(['DS04009002024','영재교육전공']);
+DS04009.push(['DS04009002023','공통사회교육전공']);
+DS04009.push(['DS04009003001','TESOL']);
+DS04009.push(['DS04009002003','불어교육전공']);
+DS04009.push(['DS04009002009','일반사회전공']);
+DS04009.push(['DS04009002010','생물교육전공']);
+DS04009.push(['DS04009002012','보건교육전공']);
+DS04009.push(['DS04009002013','초등학교전문상담교사']);
+DS04009.push(['DS04009002014','중등학교전문상담교사']);
+DS04009.push(['DS04009002018','특수학교전문상담교사']);
+DS04009.push(['DS04009002020','청소년지도']);
+DS04009.push(['DS04009002026','심리치료교육전공']);
+DS04009.push(['DS04009002027','장애지원교육전공']);
+DS04009.push(['DS04009002028','융합인재교육전공']);
+DS04009.push(['DS04009002029','평생교육및HRD전공']);
+DS04009.push(['DS04009002030','통합과학교육전공']);
+DS04009.push(['DS04009002032','융합인재 및 영재교육전공']);
+DS04009.push(['DS04009002033','AI융합교육']);
+
+mjCdMap["DS04009"] = DS04009;
+
+var DS04010 = new Array();
+DS04010.push(['DS04010002002','정보통신전공']);
+DS04010.push(['DS04010002003','C⁴I전공']);
+DS04010.push(['DS04010002004','사이버보안전공']);
+DS04010.push(['DS04010002005','정보통신/C⁴I전공']);
+DS04010.push(['DS04010002006','사이버보안/C⁴I전공']);
+DS04010.push(['DS04010002007','IoT(사물인터넷)']);
+DS04010.push(['DS04010002008','유비쿼터스시스템/C⁴I전공']);
+DS04010.push(['DS04010002009','정보시스템감리전공']);
+DS04010.push(['DS04010002010','C⁴ISR전공']);
+DS04010.push(['DS04010002011','소프트웨어아키텍쳐']);
+DS04010.push(['DS04010002013','사이버보안전공(X)']);
+DS04010.push(['DS04010002014','사이버보안/C⁴I전공(X)']);
+DS04010.push(['DS0401000215','지능형소프트웨어전공']);
+DS04010.push(['DS04010003015','인도네시아청년초청연수']);
+DS04010.push(['DS0401000316','ODA초청연수']);
+DS04010.push(['DS04010004017','글로벌IT전공예비과정']);
+
+mjCdMap["DS04010"] = DS04010;
+
+var DS04011 = new Array();
+DS04011.push(['DS04011002001','교통공학전공']);
+DS04011.push(['DS04011003001','ITS 전공']);
+DS04011.push(['DS04011004001','u-SOC 최고위전공']);
+DS04011.push(['DS04011005001','교통공학전공']);
+DS04011.push(['DS04011005002','ITS 전공']);
+DS04011.push(['DS04011006001','철도시스템전공']);
+
+mjCdMap["DS04011"] = DS04011;
+
+var DS04012 = new Array();
+DS04012.push(['DS04012003001','질병과건강관리최고위자과정']);
+DS04012.push(['DS04012002001','보건정책과 관리']);
+DS04012.push(['DS04012002002','역학과 건강증진']);
+DS04012.push(['DS04012002003','환경,산업보건']);
+DS04012.push(['DS04012002004','안전보건']);
+DS04012.push(['DS04012002005','구강위생관리']);
+DS04012.push(['DS04012002006','국제보건']);
+
+mjCdMap["DS04012"] = DS04012;
+
+var DS04013 = new Array();
+DS04013.push(['DS04013002001','지식재산법무전공']);
+DS04013.push(['DS04013002002','금융조세법무전공']);
+DS04013.push(['DS04013002003','지방자치법무전공']);
+DS04013.push(['DS04013002004','경찰법무전공']);
+
+mjCdMap["DS04013"] = DS04013;
+
+var DS04002 = new Array();
+DS04002.push(['DS04002002001','정보통신공학전공']);
+
+mjCdMap["DS04002"] = DS04002;
+
+var DS04003 = new Array();
+DS04003.push(['DS04003002001','법학전공']);
+
+mjCdMap["DS04003"] = DS04003;
+
+var DS04004 = new Array();
+DS04004.push(['DS04004001001','의학전공']);
+
+mjCdMap["DS04004"] = DS04004;
+
+var DS04020 = new Array();
+DS04020.push(['DS04020001001','의약전공']);
+DS04020.push(['DS04020001002','임상약학전공']);
+DS04020.push(['DS04020001003','기능성소재전공']);
+DS04020.push(['DS04020001004','임상상담약학전공']);
+DS04020.push(['DS04020001005','화장품·식품과학전공']);
+
+mjCdMap["DS04020"] = DS04020;
+
+var DS04017 = new Array();
+DS04017.push(['DS04017001001','금융공학전공']);
+
+mjCdMap["DS04017"] = DS04017;
+
+var DS04018 = new Array();
+DS04018.push(['DS04018001001','급속교정학전공']);
+DS04018.push(['DS04018001002','치과마취학전공']);
+DS04018.push(['DS04018001003','임플란트ㆍ보철학전공']);
+DS04018.push(['DS04018001004','구강악안면외과학전공']);
+DS04018.push(['DS04018001005','소아치과 및 성장교정학전공']);
+DS04018.push(['DS04018001007','치주보철ㆍ임플란트학전공']);
+DS04018.push(['DS04018001008','치과교정학전공']);
+DS04018.push(['DS04018001009','통합치의학전공']);
+DS04018.push(['DS04018002001','임상구강보건학전공']);
+
+mjCdMap["DS04018"] = DS04018;
+
+var DS04019 = new Array();
+DS04019.push(['DS040190101','정보전자전공']);
+DS04019.push(['DS040190102','국방IT전공']);
+DS04019.push(['DS0401902001','정보전자전공']);
+DS04019.push(['DS0401902002','국방IT전공']);
+
+mjCdMap["DS04019"] = DS04019;
+
+
+/* ======================================================================
+Variable :  교과영역
+====================================================================== */
+var submattFldFgMap = new Object();
+
+var SUBMATT_FLD_FG = new Array();
+SUBMATT_FLD_FG.push(['U0204006','역사와 철학(인문학1)']);
+SUBMATT_FLD_FG.push(['U0204007','문학과 예술(인문학2)']);
+SUBMATT_FLD_FG.push(['U0204008','인간과 사회(사회과학)']);
+SUBMATT_FLD_FG.push(['U0204009','자연과 과학(자연과학)']);
+
+submattFldFgMap["SUBMATT_FLD_FG"] = SUBMATT_FLD_FG;
+
+
+
+function load(){
+    findTakingLessonInfo();
+}
+</script>
+
+<script language="javascript" src="{{ url_for('static', filename='script/application.js') }}"></script>
+
+    </div>
+
+          </body></html>

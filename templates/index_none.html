@@ -1,0 +1,134 @@
+<!DOCTYPE html>
+<html lang="ko"><head>
+
+
+<title>아주대 수강신청</title>
+<meta charset="utf-8">
+<meta name="viewport" content="user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0, width=device-width">
+<meta http-equiv="Content-Script-Type" content="text/javascript">
+<meta http-equiv="Content-Style-Type" content="text/css">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="format-detection" content="telephone=no">
+
+<link rel="stylesheet" href="{{ url_for('static', filename='css/layout.css') }}">
+<link rel="stylesheet" href="{{ url_for('static', filename='css/spmodal.css') }}">
+<link rel="stylesheet" href="{{ url_for('static', filename='css/loading.css') }}">
+
+<link rel="stylesheet" href="{{ url_for('static', filename='css/crownix-viewer.min.css') }}">
+<script language="javascript" src="{{ url_for('static', filename='script/jquery.lastest.js') }}"></script>
+<script language="javascript" src="{{ url_for('static', filename='script/common.js') }}"></script>
+<script language="javascript" src="{{ url_for('static', filename='script/message.js') }}"></script>
+<script language="javascript" src="{{ url_for('static', filename='script/crownix-viewer.min.js') }}"></script>
+
+</head>
+<body>
+    <div class="header" style="text-align: center;">
+	    <form id="frmHeader" onsubmit="return false;">
+		<input type="hidden" name="strCampFg" value="S">
+		<input type="hidden" name="strLtYy" value="2022">
+		<input type="hidden" name="strLtShtmCd" value="U0002001">
+		<input type="hidden" name="strNewYn" value="">
+		<input type="hidden" name="strTransYn" value="">
+        <div class="fixed-wid h-logo">
+
+
+	             <a href="#" class="h-logo-link">
+	                 <img src="{{ url_for('static', filename='images/white-logo.png') }}" alt="아주대로고">
+	             </a>
+	             <div class="top-menu">
+	                 <ul id="menu">
+	                     <li id="bord">공지사항</li>
+	                     <li id="aply">수강신청</li>
+	                     <li id="time">개인시간표</li>
+	                     <li id="revs">조정강의정보</li>
+	                 </ul>
+	             </div>
+
+
+
+			<input type="hidden" name="strStdNo" value="{{stdNumber}}">
+			<input type="hidden" name="strLoginUserNo" value="{{stdNumber}}">
+			<input type="hidden" name="strStdNm" value="{{name}}">
+			<input type="hidden" name="strLtShtmNm" value="1학기">
+			<input type="hidden" name="strShyrCd" value="U0003002">
+
+             <div class="logout">
+                 <div class="login-info"><span>{{name}}</span> / <span>{{stdNumber}}</span> 님</div>
+                 <div class="nb-buttons nb-inlint">
+                     <div class="nb-btn-logout"><button type="button" id="btnLogout" style="cursor: pointer;">로그아웃</button></div>
+                 </div>
+             </div>
+
+
+         </div>
+         </form>
+    </div>
+
+<script type="text/javascript">
+<!--
+$(document).ready(function(){
+	$("#menu > li").on("click",function(){
+	   if(!isLoginUser){ notLogin(); }else{ goPages($(this).attr("id")); }
+	});
+
+	$("#mobileMenu").on("click",function(){
+		if($(this).hasClass("on")){
+			$(this).removeClass("on");
+		}else{
+			$(this).addClass("on");
+		}
+	});
+
+   $("#btnLogout")
+   .text(message.get('logout'))
+   .on("click",function(){
+	   logoutUser();
+   });
+
+   $(".h-logo-link").on("click",function(){
+	   goLoginPage();
+   });
+
+   $("button").css("cursor","pointer");
+
+   $(".FC_ENTER").on("keypress",function(){
+   	   fnIsEnter();
+   });
+
+
+});
+//-->
+</script>
+	<div class="BO_system nb-q fixed-wid" id="contents">
+
+<form name="login" onsubmit="return false;" style="position: relative; display: inline-block; vertical-align: middle;">
+	<input type="hidden" name="type" value="check">
+	<input type="hidden" name="strCampFg" value="S">
+	<input type="hidden" name="strUnivGrscCd" value="DS03">
+
+      <div class="login">
+         <div id="mobile_title" class="nb-title main" style="display:none;">수강신청 로그인</div>
+
+          <div class="help-block ONLY_ENG" style="display:none;">
+                For course descriptions please visit the online directory of classes :
+                <span class="link"><a href="/aply/application_eng_courPlan.action" target="COUR_PLAN">Website for Course Description</a></span>
+                <br>
+                You can also check the course description, list and additional information on this website.
+                <span class="link">
+                	<a href="https://oia.ajou.ac.kr/oia/incoming/english-course.do" target="COUR_PLAN">
+                	https://oia.ajou.ac.kr/oia/incoming/english-course.do
+                	</a>
+                </span>
+                <br>
+                <span class="gray">This online course registration page will be ONLY acailable for application period.</span>
+          </div>
+          <div class="help-block NOT_ONLY_ENG">
+              * 통합홈페이지의 로그인ID 및 비밀번호를 입력하세요.<br>
+              * 관련안내 : <span class="red">로그인 후 30분동안 어떤작업도 하지 않으면 재로그인 해야 합니다.(로그인유지시간 : 30분).</span>
+          </div>
+      </div>
+</form>
+
+    </div>
+
+</body></html>
