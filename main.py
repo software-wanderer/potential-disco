@@ -24,7 +24,6 @@ class MainWindow(Ui_Dialog):
                                      
     def resetTime(self):
         if hasattr(self, 'thread'):
-            print(self.dateTimeEdit.dateTime())
             self.flask.startDate = self.dateTimeEdit.dateTime()
             self.textBrowser.append(f'수강신청 페이지가 열리는 시간이 {self.flask.startDate.toString("yyyy. M. d. AP h:mm:ss")}으로 재설정되었습니다.')
 
