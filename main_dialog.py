@@ -78,7 +78,7 @@ class Ui_Dialog(object):
         self.label_9.setObjectName("label_9")
         self.dateTimeEdit = QtWidgets.QDateTimeEdit(self.groupBox_2)
         self.dateTimeEdit.setGeometry(QtCore.QRect(10, 50, 194, 22))
-        self.dateTimeEdit.setDateTime(QtCore.QDateTime(QtCore.QDate.currentDate(), QtCore.QTime.currentTime().addSecs(60)))
+        self.dateTimeEdit.setDateTime(QtCore.QDateTime(QtCore.QDate.currentDate(), QtCore.QTime(QtCore.QTime.currentTime().hour(), QtCore.QTime.currentTime().minute() + 1, 0)))
         self.dateTimeEdit.setObjectName("dateTimeEdit")
         self.groupBox_3 = QtWidgets.QGroupBox(Dialog)
         self.groupBox_3.setGeometry(QtCore.QRect(10, 320, 351, 270))
@@ -137,7 +137,7 @@ class Ui_Dialog(object):
         self.groupBox_3.setTitle(_translate("Dialog", "3.  웹서버 시작"))
         self.label_10.setText(_translate("Dialog", "버튼을 누르면 웹 서버가 열립니다. "))
         self.pushButton.setText(_translate("Dialog", "서버 시작"))
-        self.pushButton1.setText(_translate("Dialog", "서버 중지"))
+        self.pushButton1.setText(_translate("Dialog", "서버 재설정"))
         self.label_11.setText(_translate("Dialog", "서버 시작 후 아래 링크로 접속하세요.  "))
         self.textBrowser.setHtml(_translate("Dialog", "<!DOCTYPE HTML PUBLIC \"-//W3C//DTD HTML 4.0//EN\" \"http://www.w3.org/TR/REC-html40/strict.dtd\">\n"
 "<html><head><meta name=\"qrichtext\" content=\"1\" /><style type=\"text/css\">\n"

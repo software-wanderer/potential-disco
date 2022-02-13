@@ -17,6 +17,8 @@ class App(Flask):
     def __init__(self, name, stdNumber, stdDept, grade, maxCredits, startDate, import_name=__name__):
         super(App, self).__init__(import_name)
 
+        self.startDate = startDate
+
         self.name = name
         self.stdNumber = stdNumber
         self.stdDept = stdDept
@@ -31,7 +33,7 @@ class App(Flask):
         def index():
             html = 'index_none.html'
             # 수강 신청 시작 시간이 지나면
-            if datetime.datetime.now() > startDate:
+            if datetime.datetime.now() > self.startDate:
                 html = 'index.html'
 
             return render_template(html, name=self.name, stdNumber=self.stdNumber, stdDept=self.stdDept, grade=self.grade,
