@@ -6,8 +6,6 @@ from app import App
 
 
 class MainWindow(Ui_Dialog):
-    run = True
-
     def setupUi(self, dialog):
         super(MainWindow, self).setupUi(dialog)
 
