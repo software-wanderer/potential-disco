@@ -1,4 +1,18 @@
 # potential-disco
+
+## 개선사항
+사용 편의를 위해 몇 가지를 개선한 fork 버전입니다. [원본 Pull Request](https://github.com/software-wanderer/potential-disco/pull/1)  
+
+1. 페이지 상단의 수강신청 링크 클릭 시 실제와 같이 새로고침하도록 변경  
+![image](https://user-images.githubusercontent.com/17094868/153767836-95e3750f-8908-46c7-9d64-86f14b9b8aa4.png)  
+
+2. 프로그램 실행 시 기본 설정된 수강신청 페이지가 열리는 시간을 현재 시간 + 1분으로 설정  
+![image](https://user-images.githubusercontent.com/17094868/153767906-f229d56b-b47b-474d-90e1-d7a9293d5974.png)  
+
+3. 서버 재설정 버튼 추가, 프로그램 재실행 없이 수강신청 페이지가 열리는 시각을 수정하고 재설정  
+![image](https://user-images.githubusercontent.com/17094868/153767921-7cda3b0b-dc7a-436c-91ff-27fbc2e546fe.png)
+
+## 원본 README
 연습용 수강신청 사이트입니다. 
 
 <img width="1680" alt="스크린샷 2022-01-30 오후 12 46 49" src="https://user-images.githubusercontent.com/98575585/151685906-67aca09d-ed39-4fca-aa82-8a0206ea9531.png">

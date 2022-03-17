@@ -7,7 +7,7 @@
     <x>0</x>
     <y>0</y>
     <width>372</width>
-    <height>562</height>
+    <height>600</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -277,7 +277,7 @@
      <x>10</x>
      <y>320</y>
      <width>351</width>
-     <height>231</height>
+     <height>270</height>
     </rect>
    </property>
    <property name="title">
@@ -305,8 +305,8 @@
    <widget class="QPushButton" name="pushButton">
     <property name="geometry">
      <rect>
-      <x>190</x>
-      <y>25</y>
+      <x>10</x>
+      <y>55</y>
       <width>113</width>
       <height>32</height>
      </rect>
@@ -318,11 +318,27 @@
      <bool>false</bool>
     </property>
    </widget>
+   <widget class="QPushButton" name="pushButton1">
+    <property name="geometry">
+     <rect>
+      <x>130</x>
+      <y>55</y>
+      <width>113</width>
+      <height>32</height>
+     </rect>
+    </property>
+    <property name="text">
+     <string>서버 재설정</string>
+    </property>
+    <property name="autoDefault">
+     <bool>false</bool>
+    </property>
+   </widget>
    <widget class="QLabel" name="label_11">
     <property name="geometry">
      <rect>
       <x>10</x>
-      <y>60</y>
+      <y>100</y>
       <width>201</width>
       <height>16</height>
      </rect>
@@ -341,7 +357,7 @@
     <property name="geometry">
      <rect>
       <x>10</x>
-      <y>90</y>
+      <y>130</y>
       <width>331</width>
       <height>121</height>
      </rect>
