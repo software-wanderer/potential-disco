@@ -1,7 +1,8 @@
 # potential-disco
 
 ## 개선사항
-사용 편의를 위해 몇 가지를 개선한 fork 버전입니다.
+사용 편의를 위해 몇 가지를 개선한 fork 버전입니다. [원본 Pull Request](https://github.com/software-wanderer/potential-disco/pull/1)  
+
 1. 페이지 상단의 수강신청 링크 클릭 시 실제와 같이 새로고침하도록 변경  
 ![image](https://user-images.githubusercontent.com/17094868/153767836-95e3750f-8908-46c7-9d64-86f14b9b8aa4.png)  
 
